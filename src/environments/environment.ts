@@ -8,5 +8,4 @@ export const environment = {
     base_url: '',
     token: '',
     version: '1.0'
-
 }
