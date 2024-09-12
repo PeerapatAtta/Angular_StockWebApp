@@ -9,7 +9,7 @@ import { MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent, Mat
 import { Meta } from '@angular/platform-browser'
 
 // Import user service
-// import { UserService } from '../../services/user.service'
+import { UserService } from '../../services/user.service'
 
 @Component({
     selector: 'app-login',
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private meta: Meta,
-    // private http: UserService,
+    private http: UserService,
 ) {}
 
   ngOnInit() {
@@ -86,14 +86,14 @@ export class LoginComponent implements OnInit {
       console.log(this.userData)
 
       // เรียกใช้งาน Service สำหรับ Login
-      // this.http.Login(this.userData).subscribe({
-      //   next: (data: any) => {
-      //     console.log(data)
-      //   },
-      //   error: (error) => {
-      //     console.log(error)
-      //   }
-      // })
+      this.http.Login(this.userData).subscribe({
+        next: (data: any) => {
+          console.log(data)
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      })
 
     }
   }

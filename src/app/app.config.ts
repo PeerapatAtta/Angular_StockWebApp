@@ -7,10 +7,14 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 //ChartJS
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
+// HttpClient
+import { provideHttpClient } from '@angular/common/http';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideCharts(withDefaultRegisterables())
+    provideCharts(withDefaultRegisterables()),
+    provideHttpClient()
   ]
 };
