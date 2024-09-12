@@ -30,4 +30,8 @@ export const routes: Routes = [
         component: StockComponent,
         data: { title: 'Stock' },
     },
+    {
+        path: '**',
+        redirectTo: 'login',
+    }
 ];
