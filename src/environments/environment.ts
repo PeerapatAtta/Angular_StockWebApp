@@ -1,11 +1,8 @@
-//Environment for developement phase
 export const environment = {
     production: false,
-    //URL API
-    dotnet_api_url: 'http://localhost:3000/api',
-    dotnet_api_url_images: 'http://localhost:3000/wwwroot/uploads/',
-    //URL Web
+    dotnet_api_url: 'http://localhost:5075/api/',
+    dotnet_api_url_image: 'http://localhost:5075/wwwroot/uploads/',
     base_url: '',
     token: '',
-    version: '1.0'
+    version: '1.0',
 }

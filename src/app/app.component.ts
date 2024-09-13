@@ -1,4 +1,4 @@
-import { Component, ViewChild  } from '@angular/core'
+import { Component, ViewChild } from '@angular/core'
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router'
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon'
@@ -7,22 +7,25 @@ import { HeaderComponent } from "./components/header/header.component"
 import { MatSidenavModule } from '@angular/material/sidenav'
 import { NgStyle } from '@angular/common'
 import { Title } from '@angular/platform-browser'
+//import auth service
+import { AuthService } from './services/auth.service'
 
 @Component({
-    selector: 'app-root',
-    standalone: true,
-    templateUrl: './app.component.html',
-    styleUrl: './app.component.scss',
-    imports: [
-      NgStyle,
-      RouterOutlet, 
-      MatCardModule, 
-      MatIconModule, 
-      MenuComponent, 
-      HeaderComponent,
-      MatSidenavModule
-    ]
+  selector: 'app-root',
+  standalone: true,
+  templateUrl: './app.component.html',
+  styleUrl: './app.component.scss',
+  imports: [
+    NgStyle,
+    RouterOutlet,
+    MatCardModule,
+    MatIconModule,
+    MenuComponent,
+    HeaderComponent,
+    MatSidenavModule
+  ]
 })
+
 export class AppComponent {
   title = 'angular-stock'
 
@@ -33,10 +36,11 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
+    private auth: AuthService
   ) {
-    // Check if the user is logged in
-    // this.isLoggedIn = localStorage.getItem('LoggedInToken') ? true : false
+    // Check user is logged in or not with cookies
+    this.isLoggedIn = this.auth.isLoggedIn() ? true : false
   }
 
   ngOnInit(): void {

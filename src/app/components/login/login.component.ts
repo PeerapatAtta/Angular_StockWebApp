@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, inject } from '@angular/core'
 import { Router } from '@angular/router'
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms'
 import { MatIconButton, MatButton } from '@angular/material/button'
@@ -11,29 +11,41 @@ import { Meta } from '@angular/platform-browser'
 // Import user service
 import { UserService } from '../../services/user.service'
 
+// Import authService
+import { AuthService } from '../../services/auth.service'
+
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss',
-    standalone: true,
-    imports: [
-        MatCard,
-        MatCardImage,
-        MatCardHeader,
-        MatCardTitle,
-        MatCardContent,
-        MatFormField,
-        MatLabel,
-        MatInput,
-        MatIcon,
-        MatSuffix,
-        MatIconButton,
-        MatCardActions,
-        MatButton,
-        ReactiveFormsModule
-    ],
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  standalone: true,
+  imports: [
+    MatCard,
+    MatCardImage,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatIcon,
+    MatSuffix,
+    MatIconButton,
+    MatCardActions,
+    MatButton,
+    ReactiveFormsModule
+  ],
 })
+
 export class LoginComponent implements OnInit {
+
+  //DI
+  private meta = inject(Meta)
+  private http = inject(UserService)
+  private router = inject(Router)
+  private formBuilder = inject(FormBuilder)
+  private authService = inject(AuthService)
+
   // Form Validation
   loginForm!: FormGroup
   submitted: boolean = false
@@ -55,12 +67,12 @@ export class LoginComponent implements OnInit {
   // สำหรับซ่อนแสดง password
   hide = true
 
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private meta: Meta,
-    private http: UserService,
-) {}
+  // constructor(
+  //   private router: Router,
+  //   private formBuilder: FormBuilder,
+  //   private meta: Meta,
+  //   private http: UserService,
+  // ) { }
 
   ngOnInit() {
 
@@ -89,6 +101,27 @@ export class LoginComponent implements OnInit {
       this.http.Login(this.userData).subscribe({
         next: (data: any) => {
           console.log(data)
+          if (data.token != null) {
+
+            // save data to userLogin
+            this.userLogin = {
+              "username": data.userData.userName,
+              "email": data.userData.email,
+              "role": data.userData.roles[0],
+              "token": data.token
+            }
+
+            // Save user Data to cookies
+            this.authService.setUser(this.userLogin)
+
+            //Sent to Home
+            // delay 2 second
+            setTimeout(() => {
+              //Redirect to dashboard
+              window.location.href = '/dashboard'
+            }, 2000)
+          }
+
         },
         error: (error) => {
           console.log(error)
