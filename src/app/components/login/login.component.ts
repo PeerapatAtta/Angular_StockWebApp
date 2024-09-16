@@ -7,12 +7,14 @@ import { MatInput } from '@angular/material/input'
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
 import { MatCard, MatCardImage, MatCardHeader, MatCardTitle, MatCardContent, MatCardActions } from '@angular/material/card'
 import { Meta } from '@angular/platform-browser'
+import { MatDialog } from '@angular/material/dialog'
 
 // Import user service
 import { UserService } from '../../services/user.service'
 
 // Import authService
 import { AuthService } from '../../services/auth.service'
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component'
 
 @Component({
   selector: 'app-login',
@@ -44,7 +46,8 @@ export class LoginComponent implements OnInit {
   private http = inject(UserService)
   private router = inject(Router)
   private formBuilder = inject(FormBuilder)
-  private authService = inject(AuthService)
+  private auth = inject(AuthService)
+  private dialog = inject(MatDialog)
 
   // Form Validation
   loginForm!: FormGroup
@@ -84,6 +87,11 @@ export class LoginComponent implements OnInit {
       username: ['', [Validators.required, Validators.minLength(3)]], // iamsamit
       password: ['', [Validators.required, Validators.minLength(8)]], // Samit@1234
     })
+
+    //If user already login then redirect to dashboard
+    if (this.auth.isLoggedIn()) {
+      window.location.href = '/dashboard'
+    }
   }
 
   // ฟังก์ชัน Submit สำหรับ Login
@@ -103,6 +111,17 @@ export class LoginComponent implements OnInit {
           console.log(data)
           if (data.token != null) {
 
+            //show dialog
+            this.dialog.open(AlertDialogComponent, {
+              data: {
+                title: 'Login Success',
+                icon: 'check_circle',
+                iconColor: 'green',
+                subtitle: 'Welcome to our website'
+              },
+              disableClose: true,
+            })
+
             // save data to userLogin
             this.userLogin = {
               "username": data.userData.userName,
@@ -112,7 +131,7 @@ export class LoginComponent implements OnInit {
             }
 
             // Save user Data to cookies
-            this.authService.setUser(this.userLogin)
+            this.auth.setUser(this.userLogin)
 
             //Sent to Home
             // delay 2 second
@@ -125,6 +144,15 @@ export class LoginComponent implements OnInit {
         },
         error: (error) => {
           console.log(error)
+          this.dialog.open(AlertDialogComponent,{
+            data:{
+              title: 'Login Failed',
+              icon: 'error',
+              iconColor: 'red',
+              subtitle: 'Please check your username and password'
+            },
+            disableClose: true,
+          })
         }
       })
 
