@@ -37,6 +37,7 @@ import { ProductService } from '../../services/product.service'
 // Import Environment
 import { environment } from '../../../environments/environment'
 import { CreateProductDialogComponent } from '../create-product-dialog/create-product-dialog.component'
+import { EditProductDialogComponent } from '../edit-product-dialog/edit-product-dialog.component'
 
 @Component({
   selector: 'app-stock',
@@ -82,7 +83,7 @@ export class StockComponent implements OnInit {
 
   // Image URL
   imageUrl = environment.dotnet_api_url_image
-  dataSource = new MatTableDataSource<Record<string,string>>()
+  dataSource = new MatTableDataSource<Record<string, string>>()
   searchValue = ''
   searchTerm = new Subject<string>()
 
@@ -109,21 +110,21 @@ export class StockComponent implements OnInit {
   // Method getProducts
   getProducts() {
     this.http
-    .getAllProducts(
-      this.page,
-      this.limit,
-      this.selectedCategory,
-      this.searchQuery
-    )
-    .subscribe({
-      next: (result) => {
-        console.log(result)
-        this.dataSource.data = result.products
-      },
-      error: (error) => {
-        console.error(error)
-      },
-    })
+      .getAllProducts(
+        this.page,
+        this.limit,
+        this.selectedCategory,
+        this.searchQuery
+      )
+      .subscribe({
+        next: (result) => {
+          console.log(result)
+          this.dataSource.data = result.products
+        },
+        error: (error) => {
+          console.error(error)
+        },
+      })
   }
 
   // Method ngOnInit
@@ -143,12 +144,26 @@ export class StockComponent implements OnInit {
     // do something
     const dialogAddRef = await this.dialog.open(
       CreateProductDialogComponent,
-      {width: '600px',}
+      { width: '600px', }
     )
 
     //When product is created then get products
-    dialogAddRef.componentInstance.productCreated.subscribe((created)=>{
-      if(created){
+    dialogAddRef.componentInstance.productCreated.subscribe((created) => {
+      if (created) {
+        this.getProducts()
+      }
+    })
+  }
+
+  //Method for edit product
+  async onClickEdit(product: any) {
+    const dialogEditRef = await this.dialog.open(EditProductDialogComponent, {
+      width: '600px',
+      data: product,
+    })
+
+    dialogEditRef.componentInstance.productUpdated.subscribe((updated) => {
+      if (updated) {
         this.getProducts()
       }
     })

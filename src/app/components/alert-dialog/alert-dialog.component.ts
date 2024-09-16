@@ -1,5 +1,4 @@
 import { Component, Inject, inject } from '@angular/core';
-//Add import for alert dialog
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import {
@@ -13,7 +12,13 @@ import {
 @Component({
   selector: 'app-alert-dialog',
   standalone: true,
-  imports: [MatIcon],
+  imports: [
+    MatIcon,       
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+    MatButton, 
+  ],
   templateUrl: './alert-dialog.component.html',
   styleUrl: './alert-dialog.component.scss'
 })

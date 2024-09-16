@@ -62,7 +62,7 @@ export class CreateProductDialogComponent {
     { value: 1, viewValue: 'Mobile' },
     { value: 2, viewValue: 'Tablet' },
     { value: 3, viewValue: 'Smart Watch' },
-    { value: 4, viewValue: 'Labtop' }
+    { value: 4, viewValue: 'Laptop' }
   ]
 
   //Method for select image
