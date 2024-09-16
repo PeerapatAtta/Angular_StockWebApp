@@ -1,16 +1,9 @@
 import { Injectable, inject } from '@angular/core'
-
-// Import CookieService
 import { CookieService } from 'ngx-cookie-service'
-
-// Import HttpClient and HttpHeaders
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-
-// Import Observable
 import { Observable } from 'rxjs'
-
-// Import environment
 import { environment } from '../../environments/environment'
+import { ProductCreateUpdateModel, ProductModel } from '../models/product.model'
 
 @Injectable({
   providedIn: 'root'
@@ -25,29 +18,28 @@ export class ProductService {
   token = this.cookieService.get("LoggedInToken") || ""
 
   // Header for GET, DELETE
-  httpOptions  = {
+  httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': 'Bearer '+ this.token
+      'Authorization': 'Bearer ' + this.token
     })
   }
 
   // Header for POST, PUT
-  httpOptionsPost  = {
+  httpOptionsPost = {
     headers: new HttpHeaders({
-      'Authorization': 'Bearer '+ this.token
+      'Authorization': 'Bearer ' + this.token
     })
   }
 
   // Get All Products by parameter (page: number, limit: number, selectedCategory: string, searchQuery: string)
   getAllProducts(
-    page: number, 
-    limit: number, 
-    selectedCategory: string, 
+    page: number,
+    limit: number,
+    selectedCategory: string,
     searchQuery: string
-  ): Observable<any>
-  {
+  ): Observable<ProductModel> {
     let url = this.apiURL + 'Product?page=' + page + '&limit=' + limit
 
     if (selectedCategory) {
@@ -58,42 +50,42 @@ export class ProductService {
       url += '&searchQuery=' + searchQuery
     }
 
-    return this.http.get<any>(
-      url, 
+    return this.http.get<ProductModel>(
+      url,
       this.httpOptions
     )
   }
 
   // Get Product By ID
-  getProductById(id: number): Observable<any> {
-    return this.http.get<any>(
-      this.apiURL + 'Product/' + id, 
+  getProductById(id: number): Observable<ProductModel> {
+    return this.http.get<ProductModel>(
+      this.apiURL + 'Product/' + id,
       this.httpOptions
     )
   }
 
   // Create Product
-  createProduct(product: any): Observable<any> {
-    return this.http.post<any>(
-      this.apiURL + 'Product', 
-      product, 
+  createProduct(product: ProductCreateUpdateModel): Observable<ProductCreateUpdateModel> {
+    return this.http.post<ProductCreateUpdateModel>(
+      this.apiURL + 'Product',
+      product,
       this.httpOptionsPost
     )
   }
 
   // Update Product
-  updateProduct(id: number, product: any): Observable<any> {
-    return this.http.put<any>(
+  updateProduct(id: number, product: ProductCreateUpdateModel): Observable<ProductCreateUpdateModel> {
+    return this.http.put<ProductCreateUpdateModel>(
       this.apiURL + 'Product/' + id,
-      product, 
+      product,
       this.httpOptionsPost
     )
   }
 
   // Delete Product
-  deleteProduct(id: number): Observable<any> {
-    return this.http.delete<any>(
-      this.apiURL + 'Product/' + id, 
+  deleteProduct(id: number): Observable<unknown> {
+    return this.http.delete<unknown>(
+      this.apiURL + 'Product/' + id,
       this.httpOptions
     )
   }

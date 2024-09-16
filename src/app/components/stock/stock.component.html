@@ -1,14 +1,19 @@
 <div class="flex flex-row justify-center mt-10">
   <mat-card class="w-[95%]">
     <div class="flex flex-row justify-between">
-
       <mat-card-header class="my-2">
-        <mat-card-title>Products ({{ dataSource.data.length }} items)</mat-card-title>
+        <mat-card-title
+          >Products ({{ dataSource.data.length }} items)</mat-card-title
+        >
       </mat-card-header>
 
       <div>
         <!-- Add Product Button -->
-        <button mat-raised-button class="mt-4 mr-4 !bg-blue-700 !text-white">
+        <button
+          mat-raised-button
+          class="mt-4 mr-4 !bg-blue-700 !text-white"
+          (click)="onClickAddProduct()"
+        >
           <mat-icon class="!text-sm">add</mat-icon> Add Product
         </button>
 
@@ -21,23 +26,39 @@
         <button mat-raised-button class="mt-4 mr-4 !bg-green-600 !text-white">
           <mat-icon class="!text-sm">table_chart</mat-icon> Export CSV
         </button>
-
       </div>
-
     </div>
     <mat-card-content>
       <mat-form-field class="w-full">
-        <input class="w-100" matInput type="text" placeholder="Search..." [(ngModel)]="searchValue"
-          (keyup)="doFilter($event)" />
+        <input
+          class="w-100"
+          matInput
+          type="text"
+          placeholder="Search..."
+          [(ngModel)]="searchValue"
+          (keyup)="doFilter($event)"
+        />
         @if (searchValue) {
-        <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="clearSearch()"
+        >
           <mat-icon class="!text-sm">close</mat-icon>
         </button>
         }
       </mat-form-field>
 
-      <table mat-table #table [dataSource]="dataSource" class="w-full table-hovor" matSort matSortActive="productID"
-        matSortDirection="desc">
+      <table
+        mat-table
+        #table
+        [dataSource]="dataSource"
+        class="w-full table-hovor"
+        matSort
+        matSortActive="productID"
+        matSortDirection="desc"
+      >
         <!-- Id -->
         <ng-container matColumnDef="productID">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
@@ -46,14 +67,20 @@
 
         <!-- Image -->
         <ng-container matColumnDef="productPicture">
-          <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          <th mat-header-cell *matHeaderCellDef style="text-align: left">
             รูป
           </th>
           <td mat-cell *matCellDef="let row">
-            <img [src]="row.productpicture != 'noimg.jpg' ? 
-                      imageUrl + row.productpicture 
-                      : 
-                      'assets/images/nglogo.jpg'" height="50px" width="50px" class="rounded-full mat-image-cell" />
+            <img
+              [src]="
+                row.productpicture != 'noimg.jpg'
+                  ? imageUrl + row.productpicture
+                  : 'assets/images/nglogo.jpg'
+              "
+              height="50px"
+              width="50px"
+              class="rounded-full mat-image-cell"
+            />
           </td>
         </ng-container>
 
@@ -61,7 +88,7 @@
         <ng-container matColumnDef="productName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>ชื่อ</th>
           <td mat-cell *matCellDef="let row">
-            {{ row.productname | slice:0:20 }}
+            {{ row.productname | slice : 0 : 20 }}
             <!-- @if (row.product_name.length > 20) {
               ...
             } -->
@@ -98,15 +125,25 @@
 
         <!-- Actions -->
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef style="text-align: center; width: 200px">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="text-align: center; width: 200px"
+          >
             จัดการ
           </th>
-          <td mat-cell *matCellDef="let row" style="text-align: center; width: 200px">
+          <td
+            mat-cell
+            *matCellDef="let row"
+            style="text-align: center; width: 200px"
+          >
+            <mat-icon class="!text-2xl text-yellow-700 cursor-pointer"
+              >edit</mat-icon
+            >&nbsp;&nbsp;&nbsp;
 
-            <mat-icon class="!text-2xl text-yellow-700 cursor-pointer">edit</mat-icon>&nbsp;&nbsp;&nbsp;
-
-            <mat-icon class="!text-2xl text-red-700 cursor-pointer">delete</mat-icon>
-
+            <mat-icon class="!text-2xl text-red-700 cursor-pointer"
+              >delete</mat-icon
+            >
           </td>
         </ng-container>
 
@@ -122,7 +159,7 @@
         </div>
       } -->
 
-      <mat-paginator [pageSize]="2" [pageSizeOptions]="[2, 5, 10, 25, 100]">
+      <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
       </mat-paginator>
     </mat-card-content>
   </mat-card>

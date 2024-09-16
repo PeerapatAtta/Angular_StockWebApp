@@ -84,8 +84,8 @@ export class LoginComponent implements OnInit {
 
     // กำหนดค่าให้กับ Form
     this.loginForm = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(3)]], // iamsamit
-      password: ['', [Validators.required, Validators.minLength(8)]], // Samit@1234
+      username: ['', [Validators.required, Validators.minLength(3)]], 
+      password: ['', [Validators.required, Validators.minLength(8)]], 
     })
 
     //If user already login then redirect to dashboard

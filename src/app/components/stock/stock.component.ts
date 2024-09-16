@@ -8,6 +8,7 @@ import {
   MatCardSubtitle,
   MatCardContent,
 } from '@angular/material/card'
+import { MatIconButton, MatButton } from '@angular/material/button'
 import {
   MatTable,
   MatColumnDef,
@@ -28,12 +29,14 @@ import { MatFormField, MatSuffix } from '@angular/material/form-field'
 import { FormsModule } from '@angular/forms'
 import { MatPaginator } from '@angular/material/paginator'
 import { MatSort, MatSortHeader } from '@angular/material/sort'
+import { MatDialog } from '@angular/material/dialog'
 
 // Import ProductService
 import { ProductService } from '../../services/product.service'
 
 // Import Environment
 import { environment } from '../../../environments/environment'
+import { CreateProductDialogComponent } from '../create-product-dialog/create-product-dialog.component'
 
 @Component({
   selector: 'app-stock',
@@ -66,12 +69,16 @@ import { environment } from '../../../environments/environment'
     MatInput,
     FormsModule,
     DecimalPipe,
-    SlicePipe
+    SlicePipe,
+    MatButton,
+    MatIconButton
   ]
 })
 export class StockComponent implements OnInit {
 
+  //DI
   private http = inject(ProductService)
+  private dialog = inject(MatDialog)
 
   // Image URL
   imageUrl = environment.dotnet_api_url_image
@@ -129,6 +136,22 @@ export class StockComponent implements OnInit {
   ngAfterViewInit() {
     this.dataSource.sort = this.sort
     this.dataSource.paginator = this.paginator
+  }
+
+  // Method; onClickAddProduct
+  async onClickAddProduct() {
+    // do something
+    const dialogAddRef = await this.dialog.open(
+      CreateProductDialogComponent,
+      {width: '600px',}
+    )
+
+    //When product is created then get products
+    dialogAddRef.componentInstance.productCreated.subscribe((created)=>{
+      if(created){
+        this.getProducts()
+      }
+    })
   }
 
   // Method Delete Product
