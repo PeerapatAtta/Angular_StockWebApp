@@ -38,6 +38,7 @@ import { ProductService } from '../../services/product.service'
 import { environment } from '../../../environments/environment'
 import { CreateProductDialogComponent } from '../create-product-dialog/create-product-dialog.component'
 import { EditProductDialogComponent } from '../edit-product-dialog/edit-product-dialog.component'
+import { AlertDialogConfirmComponent } from '../alert-dialog-confirm/alert-dialog-confirm.component'
 
 @Component({
   selector: 'app-stock',
@@ -170,8 +171,34 @@ export class StockComponent implements OnInit {
   }
 
   // Method Delete Product
-  onClickDelete(row: any) {
-    // do something
+  async onClickDelete(id: any) {
+    await this.dialog
+      .open(AlertDialogConfirmComponent, {
+        data: {
+          title: 'ยืนยันการลบสินค้า',
+          subtitle: 'คุณต้องการลบสินค้านี้ใช่หรือไม่?',
+          confirmText: 'ยืนยันลบ',
+          cancelText: 'ยกเลิก',
+          confirmAction: () => {
+            console.log('Product deleted! ' + id)
+
+            this.http.deleteProduct(id).subscribe({
+              next: (result) => {
+                // console.log(result)
+                this.dataSource.data = this.dataSource.data.filter((product: any) => product.productid !== id)
+              },
+              error: (error) => {
+                console.error(error)
+              }
+            })
+
+            this.dataSource.data = this.dataSource.data.filter(
+              (product: any) => product.productid !== id
+            )
+          },
+        },
+      })
+      .afterClosed()
   }
 
   // Method filter product
