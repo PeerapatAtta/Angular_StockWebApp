@@ -20,6 +20,46 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialog, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { ProductService } from '../../services/product.service';
 import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
+// Date Picker
+import { MatDatepickerModule } from '@angular/material/datepicker'
+import { MatNativeDateModule, NativeDateAdapter, DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material/core'
+import { formatDate } from '@angular/common';
+
+//
+const THAI_MONTHS = [
+  'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+  'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+];
+export class ThaiDateAdapter2 extends NativeDateAdapter {
+  override getFirstDayOfWeek(): number {
+    return 1; // Monday
+  }
+
+  override getMonthNames(style: 'long' | 'short' | 'narrow'): string[] {
+    // Return the custom Thai month names
+    return THAI_MONTHS;
+  }
+  override format(date: Date, displayFormat: any): string {
+    // Format the date according to the Buddhist calendar
+    let formatString = displayFormat;
+    if (displayFormat === 'input') {
+      formatString = 'dd/MM/yyyy';
+    }
+    return formatDate(new Date(date.getFullYear() + 543, date.getMonth(), date.getDate()), formatString, this.locale);
+  }
+
+}
+export const THAI_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'dd/MM/yyyy',
+    monthYearLabel: 'MMM yyyy',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM yyyy',
+  }
+};
 
 @Component({
   selector: 'app-create-product-dialog',
@@ -37,7 +77,14 @@ import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
     MatSelectModule,
     MatDialogContent,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDatepickerModule,
+    MatNativeDateModule
+  ],
+  providers: [
+    { provide: DateAdapter, useClass: ThaiDateAdapter2 },
+    { provide: MAT_DATE_LOCALE, useValue: 'th-TH' },
+    { provide: MAT_DATE_FORMATS, useValue: THAI_DATE_FORMATS },
   ],
   templateUrl: './create-product-dialog.component.html',
   styleUrl: './create-product-dialog.component.scss'
@@ -106,6 +153,7 @@ export class CreateProductDialogComponent {
       categoryid: ['', [Validators.required]],
       createddate: [dateNow],
       modifieddate: [dateNow],
+      thaidate: [],
     })
   }
 
