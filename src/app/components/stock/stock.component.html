@@ -27,7 +27,11 @@
         </button>
 
         <!-- Export CSV Button -->
-        <button mat-raised-button class="mt-4 mr-4 !bg-green-600 !text-white">
+        <button
+          mat-raised-button
+          class="mt-4 mr-4 !bg-green-600 !text-white"
+          (click)="onClickExportCSV()"
+        >
           <mat-icon class="!text-sm">table_chart</mat-icon> Export CSV
         </button>
       </div>

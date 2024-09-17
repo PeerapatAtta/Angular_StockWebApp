@@ -295,9 +295,36 @@ export class StockComponent implements OnInit {
     doc.save(pdfName);
   }
 
-  // Method Export to Excel
+  // Export the CSV file
   onClickExportCSV() {
-    // do something
+    const csvRow = []
+    const header = ["ID", "Product", "Category", "Price", "Unit", "Created"]
+    csvRow.push(header.join(","))
+
+    this.dataSource.data.map((product: any, index: number) => {
+      const row = [
+        index + 1,
+        `"${product.productname.replace(/"/g, '""')}"`,
+        `"${product.categoryname.replace(/"/g, '""')}"`,
+        product.unitprice,
+        product.unitinstock,
+        this.datePipe.transform(product.createddate, 'dd/MM/yyyy')
+      ];
+      csvRow.push(row.join(","))
+    })
+
+    const csvString = csvRow.join("\n")
+    const BOM = "\uFEFF";
+    const blob = new Blob([BOM + csvString], {
+      type: "text/csv;charset=utf-8;",
+    })
+
+    const a = document.createElement("a")
+    a.href = URL.createObjectURL(blob)
+    a.setAttribute("download", `products-${new Date().toISOString()}.csv`)
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
   }
 
 }
